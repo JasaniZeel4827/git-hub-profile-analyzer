@@ -3,7 +3,7 @@
 import type React from "react"
 
 import { useState, useEffect, useRef } from "react"
-import { Search, ExternalLink, MapPin, Building, Globe, Users, GitFork, Github } from "lucide-react"
+import { Search, ExternalLink, MapPin, Building, Globe, Users, GitFork } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
@@ -152,15 +152,21 @@ export default function GitHubProfileFinder() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex items-center justify-between mb-8">
-          <div className="flex items-center gap-3">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <Github className="h-8 w-8 text-primary" />
+          <div className="flex items-center gap-4">
+            <div className="relative">
+              <Image
+                src="/deltainsight-logo.png"
+                alt="DeltaInsight Logo"
+                width={60}
+                height={60}
+                className="object-contain"
+              />
             </div>
             <div>
               <h1 className="text-3xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
-                DeltaInsight – professional, analyzer-focused
+                DeltaInsight
               </h1>
-              <p className="text-muted-foreground">Discover and analyze GitHub profiles with detailed insights</p>
+              <p className="text-muted-foreground">Professional GitHub Profile Analytics & Intelligence</p>
             </div>
           </div>
           <ThemeToggle />
