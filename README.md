@@ -1,30 +1,100 @@
-# Github profile finder
+# GitHub Profile Finder & Analyzer
 
-*Automatically synced with your [v0.dev](https://v0.dev) deployments*
+A Next.js 15 app that lets you search any GitHub username and instantly view a polished profile plus smart analytics, including total stars, top languages, top repositories, account age (in days), and more.
 
-[![Deployed on Vercel](https://img.shields.io/badge/Deployed%20on-Vercel-black?style=for-the-badge&logo=vercel)](https://vercel.com/jasanizeel487-gmailcoms-projects/v0-github-profile-finder)
-[![Built with v0](https://img.shields.io/badge/Built%20with-v0.dev-black?style=for-the-badge)](https://v0.dev/chat/projects/MOv8xDOdSxc)
+## Features
+- **Search GitHub users** and display profile details (name, bio, location, company, blog, followers/following, public repos)
+- **Analytics summary**
+  - Total stars across repositories
+  - Language distribution (count of repos per language)
+  - Top repositories by stars
+  - Account age (days since account creation)
+  - Total repositories fetched
+- **Recent searches** stored locally for quick reuse
+- **Beautiful UI** using shadcn/ui, Radix primitives, Tailwind CSS
+- **Light/Dark mode** with a simple theme toggle
 
-## Overview
+## Tech Stack
+- **Framework**: Next.js 15 (App Router)
+- **Language**: TypeScript, React 19
+- **Styling**: Tailwind CSS, tailwind-merge, tailwindcss-animate
+- **UI**: shadcn/ui components (Radix UI), lucide-react icons
+- **Charts**: recharts (used in analytics component)
 
-This repository will stay in sync with your deployed chats on [v0.dev](https://v0.dev).
-Any changes you make to your deployed app will be automatically pushed to this repository from [v0.dev](https://v0.dev).
+## Project Structure
+```
+app/
+  api/
+    github/
+      user/[username]/route.ts     # Fetch GitHub user profile
+      repos/[username]/route.ts    # Fetch user repositories (first 100)
+  page.tsx                         # Main page: search + profile + analytics
+components/
+  profile-analytics.tsx            # Analytics UI (languages, stars, top repos)
+  theme-toggle.tsx                 # Light/Dark mode toggle
+  ui/*                             # shadcn/ui components
+lib/
+  utils.ts                         # Utility helpers
+styles/, public/, tailwind.config.ts, tsconfig.json, etc.
+```
 
-## Deployment
+## API Routes (Internal)
+These routes proxy GitHub’s REST API and are used by the client.
 
-Your project is live at:
+- `GET /api/github/user/[username]`
+  - Proxies `GET https://api.github.com/users/[username]`
+  - Returns the GitHub user profile JSON
 
-**[https://vercel.com/jasanizeel487-gmailcoms-projects/v0-github-profile-finder](https://vercel.com/jasanizeel487-gmailcoms-projects/v0-github-profile-finder)**
+- `GET /api/github/repos/[username]`
+  - Proxies `GET https://api.github.com/users/[username]/repos?per_page=100&sort=updated&direction=desc`
+  - Returns up to 100 repos (sorted by last update) for analytics
 
-## Build your app
+Notes:
+- Calls include headers `Accept: application/vnd.github.v3+json` and a `User-Agent` string.
+- These endpoints do not use authentication by default; unauthenticated GitHub API requests are rate-limited (typically 60 requests/hour per IP). See Troubleshooting below.
 
-Continue building your app on:
+## Getting Started
 
-**[https://v0.dev/chat/projects/MOv8xDOdSxc](https://v0.dev/chat/projects/MOv8xDOdSxc)**
+### Prerequisites
+- Node.js 18+ recommended
+- pnpm (preferred) or npm/yarn
 
-## How It Works
+### Install
+```bash
+pnpm install
+# or
+npm install
+```
 
-1. Create and modify your project using [v0.dev](https://v0.dev)
-2. Deploy your chats from the v0 interface
-3. Changes are automatically pushed to this repository
-4. Vercel deploys the latest version from this repository
+### Run Dev Server
+```bash
+pnpm dev
+# or
+npm run dev
+```
+Then open `http://localhost:3000`.
+
+### Build and Start (Production)
+```bash
+pnpm build
+pnpm start
+# or
+npm run build
+npm start
+```
+
+## Usage
+1. Open the app and enter a GitHub username (e.g., `vercel`, `torvalds`).
+2. Submit to fetch the profile and repositories.
+3. Explore the analytics panel for stars, languages, top repos, and account age.
+4. Click a repo or the profile link to open it on GitHub.
+5. Reuse recent searches via the badges under the search bar.
+
+## Customization Tips
+- UI theming is handled via shadcn/ui + Tailwind. Update styles in `app/globals.css` or component classes.
+- Analytics logic is computed in `app/page.tsx` after repos are fetched. Extend it to add metrics like average stars per repo, forks, issues, commit activity (requires additional endpoints), etc.
+- `components/profile-analytics.tsx` is the place to modify analytics visualizations.
+
+
+
+
